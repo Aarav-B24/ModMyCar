@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ModMyCar - Custom Build Dashboard</title>
-    <script src="https://jsdelivr.net"></script>
     <style>
         :root {
             --bg-main: #0B0F19;
@@ -20,23 +19,22 @@
         
         /* Sidebar Elements */
         .sidebar { background-color: var(--bg-card); border: 1px solid var(--border-color); padding: 24px; border-radius: 16px; height: fit-content; }
-        .brand-header { display: flex; align-items: center; gap: 12px; margin-bottom: 40px; font-weight: 800; font-size: 22px; color: var(--text-primary); }
+        .brand-header { margin-bottom: 40px; font-weight: 800; font-size: 22px; color: var(--text-primary); }
         .brand-header span { color: var(--accent-orange); }
-        .menu-item { display: flex; align-items: center; gap: 12px; padding: 12px; color: var(--text-secondary); text-decoration: none; border-radius: 8px; margin-bottom: 8px; font-weight: 500; font-size: 15px; }
+        .menu-item { display: block; padding: 12px; color: var(--text-secondary); text-decoration: none; border-radius: 8px; margin-bottom: 8px; font-weight: 500; font-size: 15px; }
         .menu-item.active { background-color: var(--accent-orange); color: white; }
         
         /* Main Workspace Panels */
         .main-content { display: flex; flex-direction: column; gap: 32px; }
-        .hero-banner { background: linear-gradient(135deg, #1A263E 0%, #111A2E 100%); border: 1px solid var(--border-color); border-radius: 20px; padding: 40px; display: flex; justify-content: space-between; align-items: center; position: relative; overflow: hidden; }
+        .hero-banner { background: linear-gradient(135deg, #1A263E 0%, #111A2E 100%); border: 1px solid var(--border-color); border-radius: 20px; padding: 40px; display: flex; justify-content: space-between; align-items: center; position: relative; overflow: hidden; gap: 20px; }
         .hero-text h1 { font-size: 36px; font-weight: 800; margin-bottom: 12px; }
         .hero-text p { color: var(--text-secondary); font-size: 16px; max-width: 550px; line-height: 1.6; }
         .hero-image-frame { width: 420px; height: 220px; position: relative; background: #080C14; border-radius: 12px; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .hero-image-frame img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.3s ease; }
+        .hero-image-frame img { width: 100%; height: 100%; object-fit: cover; }
         
         /* Dropdowns and Selectors */
         .selector-bar { display: flex; gap: 16px; margin-bottom: 8px; }
         .custom-select { background-color: var(--bg-card); border: 1px solid var(--border-color); color: white; padding: 12px 20px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; outline: none; }
-        .custom-select:focus { border-color: var(--accent-orange); }
         
         /* Stats row Grid */
         .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
@@ -53,8 +51,7 @@
         .parts-table td { padding: 18px 16px; border-bottom: 1px solid #1C263B; font-size: 15px; }
         .parts-table tr:hover { background-color: #1A243A; }
         .part-tag { background: #202C45; color: #8A99AD; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 700; text-transform: uppercase; }
-        .action-btn { background-color: var(--accent-orange); color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 700; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; text-decoration: none; }
-        .action-btn:hover { opacity: 0.9; }
+        .action-btn { background-color: var(--accent-orange); color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 700; font-size: 13px; cursor: pointer; text-decoration: none; display: inline-block; }
         .checkbox-cell { width: 40px; text-align: center; }
         .checkbox-cell input { width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent-orange); }
     </style>
@@ -62,17 +59,14 @@
 <body>
 
 <div class="dashboard-container">
-    <!-- Left Navigation Sidebar -->
     <div class="sidebar">
-        <div class="brand-header"><i data-lucide="car"></i>ModMy<span>Car</span></div>
-        <a href="#" class="menu-item active"><i data-lucide="layout-dashboard"></i>Dashboard</a>
-        <a href="#" class="menu-item"><i data-lucide="layers"></i>Parts Catalog</a>
-        <a href="#" class="menu-item"><i data-lucide="check-square"></i>My Shortlist (<span id="menu-count">0</span>)</a>
+        <div class="brand-header">🚘 ModMy<span>Car</span></div>
+        <a href="#" class="menu-item active">Dashboard</a>
+        <a href="#" class="menu-item">Parts Catalog</a>
+        <a href="#" class="menu-item">My Shortlist (<span id="menu-count">0</span>)</a>
     </div>
 
-    <!-- Right Workspace Area -->
     <div class="main-content">
-        <!-- Interactive Model Selector dropdown row -->
         <div class="selector-bar">
             <select class="custom-select" id="model-filter" onchange="switchVehicleModel(this.value)">
                 <option value="C200">Mercedes C200 / W205</option>
@@ -84,7 +78,6 @@
             </select>
         </div>
 
-        <!-- Dynamic Hero Banner Display Area -->
         <div class="hero-banner">
             <div class="hero-text">
                 <h1 id="hero-title">Plan your next C200 build</h1>
@@ -95,11 +88,10 @@
             </div>
         </div>
 
-        <!-- Dynamic Stat Metric Cards -->
         <div class="stats-grid">
             <div class="stat-card">
                 <span class="label">Available Parts</span>
-                <span class="value" id="stat-parts-count">5</span>
+                <span class="value" id="stat-parts-count">0</span>
             </div>
             <div class="stat-card">
                 <span class="label">Categories</span>
@@ -115,7 +107,6 @@
             </div>
         </div>
 
-        <!-- Catalog Product Grid Table Area -->
         <div class="catalog-section">
             <h2>Parts Catalog Table</h2>
             <table class="parts-table">
@@ -130,7 +121,7 @@
                     </tr>
                 </thead>
                 <tbody id="catalog-rows-container">
-                    <!-- Javascript auto-generates rows perfectly here -->
+                    <!-- Loaded dynamically via JavaScript -->
                 </tbody>
             </table>
         </div>
@@ -138,7 +129,6 @@
 </div>
 
 <script>
-    // Embedded Multi-Model Realistic Parts Catalogue
     const globalPartsDatabase = [
         // C200 / W205
         { model: "C200", cat: "Body Kit", brand: "Mr Bodykits", name: "Panamericana AMG GT Style Front Grille", price: 189, url: "mrbodykits.com.au" },
@@ -154,3 +144,12 @@
 
         // S-Class / W222
         { model: "S-Class", cat: "Body Kit", brand: "Mars Performance", name: "S65 AMG Carbon Styling Body Upgrade Pack", price: 2450, url: "marsperformance.com.au" },
+        { model: "S-Class", cat: "Lowering", brand: "Ghost Links", name: "Adjustable Drop Air Suspension Leveling Links", price: 349, url: "modeautoconcepts.com" },
+        { model: "S-Class", cat: "Wheels", brand: "Koya Wheels", name: "Koya SF11 Semi-Forged 20\" Custom Set", price: 2800, url: "koyawheels.co.nz" },
+
+        // CLA45 (C117)
+        { model: "CLA45 (C117)", cat: "Body Kit", brand: "Mr Bodykits", name: "AMG Aero Style Carbon Fibre Front Lip", price: 450, url: "mrbodykits.com.au" },
+        { model: "CLA45 (C117)", cat: "Exhaust", brand: "Xforce", name: "Stainless Steel Catback Performance Exhaust", price: 1650, url: "xforce.com.au" },
+        { model: "CLA45 (C117)", cat: "Lowering", brand: "Eibach", name: "Pro-Kit Sport Series Lowering Springs", price: 550, url: "eibach.com.au" },
+
+        // CLA45S (C118)
