@@ -3,140 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ModMyCar - Premium Build Configurator</title>
+    <title>ModsNation Clone - Premium 3D Tech Dashboard</title>
     <style>
         :root {
-            --bg-main: #0B0F19;
-            --bg-card: #151D30;
-            --bg-card-hover: #1D2842;
-            --accent-orange: #FF6B00;
-            --text-primary: #FFFFFF;
-            --text-secondary: #8A99AD;
-            --border-color: #24324D;
+            --bg-darkest: #080809;
+            --bg-panel: #111113;
+            --bg-card: #16161A;
+            --bg-card-hover: #1F1F24;
+            --accent-red: #E50914;
+            --accent-red-hover: #B80710;
+            --text-main: #FFFFFF;
+            --text-muted: #8E8E93;
+            --border-line: #222226;
+            --success-green: #00E676;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { background-color: var(--bg-main); color: var(--text-primary); padding: 24px; min-height: 100vh; }
-        .dashboard-container { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 280px 1fr; gap: 32px; }
+        body { background-color: var(--bg-darkest); color: var(--text-main); padding: 0; min-height: 100vh; overflow-x: hidden; }
         
-        /* Sidebar Elements */
-        .sidebar { background-color: var(--bg-card); border: 1px solid var(--border-color); padding: 24px; border-radius: 16px; height: fit-content; }
-        .brand-header { font-weight: 800; font-size: 22px; color: var(--text-primary); margin-bottom: 40px; }
-        .brand-header span { color: var(--accent-orange); }
-        .menu-item { display: block; padding: 12px; color: var(--text-secondary); text-decoration: none; border-radius: 8px; margin-bottom: 8px; font-weight: 500; font-size: 15px; }
-        .menu-item.active { background-color: var(--accent-orange); color: white; }
+        /* Master Header Navigation Bar */
+        .mods-nav { background-color: var(--bg-panel); border-bottom: 1px solid var(--border-line); padding: 16px 40px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .logo-section { display: flex; align-items: center; gap: 6px; font-weight: 900; font-size: 24px; letter-spacing: -1px; cursor: pointer; }
+        .logo-badge { background-color: var(--accent-red); color: white; padding: 4px 8px; border-radius: 6px; font-size: 13px; font-weight: 900; text-transform: uppercase; }
+        .nav-links { display: flex; gap: 28px; list-style: none; align-items: center; }
+        .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 14px; font-weight: 700; transition: color 0.2s; cursor: pointer; }
+        .nav-links a:hover, .nav-links a.active { color: var(--text-main); }
+        .build-btn { background-color: var(--accent-red); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 800; font-size: 13px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.2s; box-shadow: 0 4px 12px rgba(229, 9, 20, 0.3); }
+        .build-btn:hover { background-color: var(--accent-red-hover); transform: translateY(-1px); }
         
-        /* Main Workspace Panels */
-        .main-content { display: flex; flex-direction: column; gap: 32px; }
-        .hero-banner { background: linear-gradient(135deg, #1A263E 0%, #111A2E 100%); border: 1px solid var(--border-color); border-radius: 20px; padding: 40px; display: flex; justify-content: space-between; align-items: center; position: relative; overflow: hidden; gap: 20px; }
-        .hero-text h1 { font-size: 36px; font-weight: 800; margin-bottom: 12px; }
-        .hero-text p { color: var(--text-secondary); font-size: 16px; max-width: 550px; line-height: 1.6; }
-        .hero-image-frame { width: 420px; height: 220px; position: relative; background: #080C14; border-radius: 12px; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .hero-image-frame img { width: 100%; height: 100%; object-fit: cover; }
+        /* Sub-Navigation Row bar */
+        .sub-nav { padding: 24px 40px 12px 40px; display: flex; gap: 24px; border-bottom: 1px solid rgba(255,255,255,0.02); }
+        .sub-link { color: var(--text-muted); font-size: 16px; font-weight: 700; cursor: pointer; padding-bottom: 8px; text-decoration: none; }
+        .sub-link.active { color: var(--text-main); border-bottom: 2px solid var(--accent-red); }
+
+        /* Main Workspace View Panels */
+        .main-container { padding: 40px; max-width: 1600px; margin: 0 auto; display: none; }
+        .main-container.active-view { display: block; }
+        .section-headline { font-size: 24px; font-weight: 900; margin-bottom: 28px; letter-spacing: -0.5px; }
+
+        /* Premium Masonry Grid System */
+        .mods-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 28px; margin-bottom: 48px; }
         
-        /* Dropdowns and Selectors */
-        .selector-bar { display: flex; gap: 16px; margin-bottom: 8px; }
-        .custom-select { background-color: var(--bg-card); border: 1px solid var(--border-color); color: white; padding: 12px 20px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; outline: none; }
+        /* MODS Nation Image-Focused Custom Visual Cards styling */
+        .mod-card { background-color: var(--bg-card); border-radius: 16px; overflow: hidden; border: 1px solid var(--border-line); display: flex; flex-direction: column; position: relative; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); }
+        .mod-card:hover { transform: translateY(-6px); border-color: #33333C; box-shadow: 0 12px 24px rgba(0,0,0,0.5); }
+        .card-visual-wrapper { width: 100%; height: 360px; position: relative; background-color: #000; overflow: hidden; }
+        .card-visual-wrapper img { width: 100%; height: 100%; object-fit: cover; }
         
-        /* Stats row Grid */
-        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
-        .stat-card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 8px; }
-        .stat-card .label { font-size: 14px; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-        .stat-card .value { font-size: 28px; font-weight: 800; }
-        .stat-card .value.build-total { color: var(--accent-orange); }
+        /* Profile & Account badging badge overlay layout */
+        .user-overlay { position: absolute; top: 16px; left: 16px; display: flex; align-items: center; gap: 8px; background: rgba(0,0,0,0.6); padding: 6px 12px; border-radius: 20px; backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.05); }
+        .avatar-circle { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: white; }
+        .username-text { font-size: 12px; font-weight: 700; color: white; }
         
-        /* Tuning Grid Marketplace Section */
-        .catalog-section h2 { font-size: 22px; font-weight: 700; margin-bottom: 24px; }
-        .marketplace-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
+        /* Floating Engagement Sidebar Control Nodes panel */
+        .engagement-panel { position: absolute; bottom: 16px; right: 16px; display: flex; flex-direction: column; gap: 12px; align-items: center; background: rgba(0,0,0,0.5); padding: 10px 8px; border-radius: 10px; backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.05); }
+        .engage-metric { display: flex; flex-direction: column; align-items: center; color: white; font-size: 11px; font-weight: 700; cursor: pointer; gap: 2px; background: none; border: none; outline: none; }
+        .engage-metric:hover { color: var(--accent-red); }
+        .engage-icon { font-size: 16px; }
+
+        /* Spec Data Labels block */
+        .card-specifications { padding: 20px; display: flex; flex-direction: column; gap: 6px; background: linear-gradient(to bottom, #16161A 0%, #0F0F12 100%); flex-grow: 1; }
+        .car-identity-title { font-size: 17px; font-weight: 800; color: var(--text-main); }
+        .car-views-tracker { font-size: 12px; color: var(--accent-red); font-weight: 700; }
+        .fitment-spec-line { font-size: 13px; color: var(--text-muted); font-weight: 500; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
+
+        /* Marketplace Product Card Adjustments */
+        .shop-btn { background-color: #222227; color: white; border: 1px solid var(--border-line); width: 100%; padding: 12px; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; text-align: center; text-decoration: none; display: block; margin-top: auto; transition: background 0.2s; }
+        .shop-btn:hover { background-color: var(--accent-red); border-color: var(--accent-red); }
+
+        /* Full Interactive Configurator Overlay Panel (Modal View) */
+        .modal-blur-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .config-modal-box { background-color: var(--bg-panel); border: 1px solid var(--border-line); border-radius: 24px; max-width: 900px; width: 100%; display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; box-shadow: 0 24px 64px rgba(0,0,0,0.8); }
+        .modal-visual-pane { background-color: #000; padding: 32px; display: flex; flex-direction: column; justify-content: space-between; border-right: 1px solid var(--border-line); position: relative; }
+        .modal-visual-pane img { width: 100%; height: 240px; object-fit: cover; border-radius: 12px; margin: auto 0; }
+        .modal-setup-pane { padding: 40px; display: flex; flex-direction: column; gap: 24px; max-height: 80vh; overflow-y: auto; }
+        .modal-close-btn { position: absolute; top: 20px; left: 20px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-line); color: white; width: 32px; height: 32px; border-radius: 50%; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         
-        /* MODS Nation Marketplace Item Cards Style */
-        .product-card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; transition: all 0.2s ease; }
-        .product-card:hover { transform: translateY(-4px); border-color: #31446C; }
-        .product-card.selected { border-color: var(--accent-orange); background-color: #1A243A; }
-        
-        .card-img-holder { width: 100%; height: 160px; background-color: #080C14; overflow: hidden; position: relative; }
-        .card-img-holder img { width: 100%; height: 100%; object-fit: cover; }
-        .category-badge { position: absolute; top: 12px; left: 12px; background: rgba(11, 15, 25, 0.85); color: var(--text-primary); padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; border: 1px solid var(--border-color); }
-        
-        .card-details { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; gap: 8px; }
-        .brand-label { font-size: 12px; color: var(--accent-orange); font-weight: 700; text-transform: uppercase; }
-        .product-title { font-size: 15px; font-weight: 700; line-height: 1.4; min-height: 42px; }
-        
-        .card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.05); }
-        .price-tag { font-size: 18px; font-weight: 800; }
-        
-        .interaction-block { display: flex; align-items: center; gap: 8px; }
-        .shop-link-btn { background-color: #202C45; color: white; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-weight: 700; font-size: 12px; border: 1px solid var(--border-color); }
-        .select-toggle { width: 20px; height: 20px; cursor: pointer; accent-color: var(--accent-orange); }
+        /* Configuration option forms */
+        .option-group { display: flex; flex-direction: column; gap: 8px; }
+        .option-group label { font-size: 12px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .modal-select { background-color: var(--bg-card); border: 1px solid var(--border-line); color: white; padding: 14px; border-radius: 8px; font-weight: 600; outline: none; width: 100%; cursor: pointer; }
+        .running-price-ticker { font-size: 32px; font-weight: 900; color: var(--success-green); margin-top: auto; }
+        .finalize-config-btn { background-color: var(--accent-red); color: white; width: 100%; border: none; padding: 16px; border-radius: 8px; font-weight: 800; font-size: 14px; text-transform: uppercase; cursor: pointer; transition: background 0.2s; }
+        .finalize-config-btn:hover { background-color: var(--accent-red-hover); }
     </style>
 </head>
 <body>
 
-<div class="dashboard-container">
-    <div class="sidebar">
-        <div class="brand-header">🚘 ModMy<span>Car</span></div>
-        <a href="#" class="menu-item active">Dashboard</a>
-        <a href="#" class="menu-item">Parts Catalog</a>
-        <a href="#" class="menu-item">My Shortlist (<span id="menu-count">0</span>)</a>
+<!-- Header Navigation Bar Component -->
+<nav class="mods-nav">
+    <div class="logo-section" onclick="switchMainTab('tab-lab')"><span class="logo-badge">mods</span> NATION</div>
+    <ul class="nav-links">
+        <li><a id="nav-lab" class="active" onclick="switchMainTab('tab-lab')">3D Mods Lab</a></li>
+        <li><a id="nav-mag" onclick="switchMainTab('tab-mag')">Magazine</a></li>
+        <li><a id="nav-market" onclick="switchMainTab('tab-market')">Marketplace</a></li>
+    </ul>
+    <div class="right-actions">
+        <button class="build-btn" onclick="openConfiguratorModal()">+ BUILD IN 3D</button>
     </div>
+</nav>
 
-    <div class="main-content">
-        <div class="selector-bar">
-            <select class="custom-select" id="model-filter" onchange="switchVehicleModel(this.value)">
-                <option value="C200">Mercedes C200 / W205</option>
-                <option value="E-Class">Mercedes E-Class / W213</option>
-                <option value="S-Class">Mercedes S-Class / W222</option>
-                <option value="CLA45 (C117)">Mercedes CLA45 AMG / C117</option>
-                <option value="CLA45S (C118)">Mercedes CLA45S AMG / C118</option>
-                <option value="CLS-Class">Mercedes CLS-Class / C257</option>
-            </select>
-        </div>
+<!-- Sub Navigation Context Header -->
+<div class="sub-nav" id="context-sub-nav">
+    <a class="sub-link active">Popular Ideas</a>
+    <a class="sub-link">What Mods Girls Choose</a>
+</div>
 
-        <div class="hero-banner">
-            <div class="hero-text">
-                <h1 id="hero-title">Plan your next C200 build</h1>
-                <p>Browse aftermarket configurations, select items to calculate an instant estimated total parts budget, and access direct retailer product pages.</p>
-            </div>
-            <div class="hero-image-frame">
-                <img id="vehicle-visual-frame" src="https://unsplash.com" alt="Active Vehicle Profile">
-            </div>
-        </div>
-
-        <div class="stats-grid">
-            <div class="stat-card">
-                <span class="label">Available Parts</span>
-                <span class="value" id="stat-parts-count">0</span>
-            </div>
-            <div class="stat-card">
-                <span class="label">Categories</span>
-                <span class="value">6</span>
-            </div>
-            <div class="stat-card">
-                <span class="label">Shortlisted Items</span>
-                <span class="value" id="stat-shortlist-count">0</span>
-            </div>
-            <div class="stat-card">
-                <span class="label">Build Cost (AUD)</span>
-                <span class="value build-total" id="stat-build-total">$0</span>
-            </div>
-        </div>
-
-        <div class="catalog-section">
-            <h2>Tuning Marketplace</h2>
-            <div class="marketplace-grid" id="marketplace-grid-container">
-                <!-- Loaded dynamically via JavaScript -->
-            </div>
-        </div>
+<!-- PANEL 1: 3D MODS LAB ENGINE VIEW -->
+<div class="main-container active-view" id="tab-lab">
+    <div class="section-headline">Trending Community Builds</div>
+    <div class="mods-grid" id="community-builds-grid">
+        <!-- Core Dynamic Lab Cards load here -->
     </div>
 </div>
 
-<script>
-    const globalPartsDatabase = [
-        // C200 / W205
-        { model: "C200", cat: "Body Kit", brand: "Mr Bodykits", name: "Panamericana AMG GT Style Front Grille", price: 189, url: "mrbodykits.com.au", img: "https://unsplash.com" },
-        { model: "C200", cat: "Body Kit", brand: "Mars Performance", name: "C63 AMG Style Front Bumper Bar Kit", price: 899, url: "marsperformance.com.au", img: "https://unsplash.com" },
-        { model: "C200", cat: "Lowering", brand: "BC Racing", name: "BR Series Fully Adjustable Street Coilovers", price: 1499, url: "bcracing.com.au", img: "https://unsplash.com" },
-        { model: "C200", cat: "Wheels", brand: "Rotiform", name: "LAS-R Multi-Spoke Satin Black 19\" Set", price: 2200, url: "rotiform.com", img: "https://unsplash.com" },
-        { model: "C200", cat: "Exhaust", brand: "Xforce", name: "Varex Valve Controlled Exhaust System", price: 2100, url: "xforce.com.au", img: "https://unsplash.com" },
-        
-        // E-Class / W213
-        { model: "E-Class", cat: "Body Kit", brand: "Mr Bodykits", name: "E63 Style Front Bumper Conversion Package", price: 950, url: "mrbodykits.com.au", img: "https://unsplash.com" },
+<!-- PANEL 2: MAGAZINE FEATURE READ VIEW -->
+<div class="main-container" id="tab-mag">
+    <div class="section-headline">Featured Tuning Insights</div>
+    <div class="mods-grid" id="magazine-articles-grid">
+        <!-- Magazine Layout loads here -->
+    </div>
+</div>
+
+<!-- PANEL 3: MARKETPLACE HUB EXPORT VIEW -->
+<div class="main-container" id="tab-market">
+    <div class="section-headline">Guaranteed Fitment Tuning Marketplace</div>
+    <div class="mods-grid" id="marketplace-products-grid">
+        <!-- E-Commerce Catalogue nodes load here -->
+    </div>
+</div>
+
