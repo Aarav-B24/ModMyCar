@@ -3,153 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ModMyCar - Custom Build Dashboard</title>
+    <title>ModMyCar - Premium Build Configurator</title>
     <style>
         :root {
-            --bg-main: #0B0F19;
-            --bg-card: #151D30;
+            --bg-main: #080C14;
+            --bg-card: #111726;
+            --bg-card-hover: #172035;
             --accent-orange: #FF6B00;
             --text-primary: #FFFFFF;
             --text-secondary: #8A99AD;
-            --border-color: #24324D;
+            --border-color: #1F2A44;
+            --success-green: #00E676;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { background-color: var(--bg-main); color: var(--text-primary); padding: 24px; min-height: 100vh; }
-        .dashboard-container { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 280px 1fr; gap: 32px; }
+        body { background-color: var(--bg-main); color: var(--text-primary); padding: 32px; min-height: 100vh; }
         
-        /* Sidebar Elements */
-        .sidebar { background-color: var(--bg-card); border: 1px solid var(--border-color); padding: 24px; border-radius: 16px; height: fit-content; }
-        .brand-header { margin-bottom: 40px; font-weight: 800; font-size: 22px; color: var(--text-primary); }
+        /* Master Layout Container */
+        .dashboard-container { max-width: 1440px; margin: 0 auto; display: grid; grid-template-columns: 280px 1fr; gap: 40px; }
+        
+        /* MODS Nation Inspired Sidebar */
+        .sidebar { background-color: var(--bg-card); border: 1px solid var(--border-color); padding: 32px; border-radius: 20px; height: fit-content; }
+        .brand-header { font-weight: 900; font-size: 24px; color: var(--text-primary); letter-spacing: -0.5px; margin-bottom: 48px; display: flex; align-items: center; gap: 8px; }
         .brand-header span { color: var(--accent-orange); }
-        .menu-item { display: block; padding: 12px; color: var(--text-secondary); text-decoration: none; border-radius: 8px; margin-bottom: 8px; font-weight: 500; font-size: 15px; }
-        .menu-item.active { background-color: var(--accent-orange); color: white; }
+        .menu-item { display: block; padding: 14px 18px; color: var(--text-secondary); text-decoration: none; border-radius: 10px; margin-bottom: 12px; font-weight: 600; font-size: 15px; transition: all 0.2s ease; }
+        .menu-item.active { background-color: var(--accent-orange); color: white; box-shadow: 0 4px 14px rgba(255, 107, 0, 0.4); }
+        .menu-item:hover:not(.active) { background-color: var(--bg-card-hover); color: white; }
         
-        /* Main Workspace Panels */
-        .main-content { display: flex; flex-direction: column; gap: 32px; }
-        .hero-banner { background: linear-gradient(135deg, #1A263E 0%, #111A2E 100%); border: 1px solid var(--border-color); border-radius: 20px; padding: 40px; display: flex; justify-content: space-between; align-items: center; position: relative; overflow: hidden; gap: 20px; }
-        .hero-text h1 { font-size: 36px; font-weight: 800; margin-bottom: 12px; }
-        .hero-text p { color: var(--text-secondary); font-size: 16px; max-width: 550px; line-height: 1.6; }
-        .hero-image-frame { width: 420px; height: 220px; position: relative; background: #080C14; border-radius: 12px; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .hero-image-frame img { width: 100%; height: 100%; object-fit: cover; }
+        /* Workspace Main Track */
+        .main-content { display: flex; flex-direction: column; gap: 40px; }
         
-        /* Dropdowns and Selectors */
-        .selector-bar { display: flex; gap: 16px; margin-bottom: 8px; }
-        .custom-select { background-color: var(--bg-card); border: 1px solid var(--border-color); color: white; padding: 12px 20px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; outline: none; }
+        /* Top Navigation Header bar */
+        .top-nav { display: flex; justify-content: space-between; align-items: center; }
+        .custom-select { background-color: var(--bg-card); border: 1px solid var(--border-color); color: white; padding: 14px 24px; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; outline: none; transition: border 0.2s; -webkit-appearance: none; appearance: none; }
+        .custom-select:focus { border-color: var(--accent-orange); }
         
-        /* Stats row Grid */
+        /* Premium Showcase Hero Section */
+        .hero-banner { background: linear-gradient(135deg, #121A2E 0%, #0A0F1D 100%); border: 1px solid var(--border-color); border-radius: 24px; padding: 48px; display: grid; grid-template-columns: 1fr 480px; align-items: center; gap: 40px; position: relative; overflow: hidden; }
+        .hero-text h1 { font-size: 42px; font-weight: 900; margin-bottom: 16px; letter-spacing: -1px; }
+        .hero-text p { color: var(--text-secondary); font-size: 16px; max-width: 520px; line-height: 1.7; }
+        .hero-image-frame { width: 480px; height: 260px; background: #05080F; border-radius: 16px; border: 1px solid var(--border-color); overflow: hidden; box-shadow: 0 12px 32px rgba(0,0,0,0.5); }
+        .hero-image-frame img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+        
+        /* Metric Scoreboard Cards */
         .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
-        .stat-card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 8px; }
-        .stat-card .label { font-size: 14px; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-        .stat-card .value { font-size: 28px; font-weight: 800; }
-        .stat-card .value.build-total { color: var(--accent-orange); }
+        .stat-card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 18px; padding: 24px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .stat-card .label { font-size: 13px; color: var(--text-secondary); font-weight: 700; text-transform: uppercase; letter-spacing: 0.75px; }
+        .stat-card .value { font-size: 32px; font-weight: 900; }
+        .stat-card .value.build-total { color: var(--accent-orange); text-shadow: 0 0 12px rgba(255,107,0,0.2); }
         
-        /* Interactive Catalog Table Layout */
-        .catalog-section { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 28px; }
-        .catalog-section h2 { font-size: 22px; font-weight: 700; margin-bottom: 20px; }
-        .parts-table { width: 100%; border-collapse: collapse; text-align: left; }
-        .parts-table th { color: var(--text-secondary); font-size: 13px; font-weight: 700; text-transform: uppercase; padding: 14px 16px; border-bottom: 1px solid var(--border-color); }
-        .parts-table td { padding: 18px 16px; border-bottom: 1px solid #1C263B; font-size: 15px; }
-        .parts-table tr:hover { background-color: #1A243A; }
-        .part-tag { background: #202C45; color: #8A99AD; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 700; text-transform: uppercase; }
-        .action-btn { background-color: var(--accent-orange); color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 700; font-size: 13px; cursor: pointer; text-decoration: none; display: inline-block; }
-        .checkbox-cell { width: 40px; text-align: center; }
-        .checkbox-cell input { width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent-orange); }
+        /* Tuning Grid Marketplace Section */
+        .catalog-section h2 { font-size: 26px; font-weight: 800; margin-bottom: 24px; letter-spacing: -0.5px; }
+        .marketplace-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 28px; }
+        
+        /* MODS Nation Marketplace Item Cards Style */
+        .product-card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); position: relative; }
+        .product-card:hover { transform: translateY(-6px); border-color: #31446C; box-shadow: 0 12px 24px rgba(0,0,0,0.4); }
+        .product-card.selected { border-color: var(--accent-orange); background-color: #141D33; box-shadow: 0 0 16px rgba(255, 107, 0, 0.15); }
+        
+        .card-img-holder { width: 100%; height: 180px; background-color: #0B0F19; overflow: hidden; position: relative; border-bottom: 1px solid var(--border-color); }
+        .card-img-holder img { width: 100%; height: 100%; object-fit: cover; }
+        .category-badge { position: absolute; top: 16px; left: 16px; background: rgba(8, 12, 20, 0.85); color: var(--text-primary); padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; border: 1px solid var(--border-color); backdrop-filter: blur(4px); }
+        
+        .card-details { padding: 24px; display: flex; flex-direction: column; flex-grow: 1; gap: 12px; }
+        .brand-label { font-size: 13px; color: var(--accent-orange); font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+        .product-title { font-size: 17px; font-weight: 700; line-height: 1.4; color: var(--text-primary); min-height: 48px; }
+        
+        .card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.05); }
+        .price-tag { font-size: 22px; font-weight: 900; color: var(--text-primary); }
+        
+        /* Interactive Card Custom Action controls */
+        .interaction-block { display: flex; align-items: center; gap: 12px; }
+        .shop-link-btn { background-color: #202C45; color: white; padding: 10px 14px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 13px; border: 1px solid var(--border-color); transition: background 0.2s; }
+        .shop-link-btn:hover { background-color: var(--bg-card-hover); }
+        
+        .select-toggle { width: 24px; height: 24px; border-radius: 6px; accent-color: var(--accent-orange); cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div class="dashboard-container">
+    <!-- Left Navigation Sidebar -->
     <div class="sidebar">
         <div class="brand-header">🚘 ModMy<span>Car</span></div>
-        <a href="#" class="menu-item active">Dashboard</a>
-        <a href="#" class="menu-item">Parts Catalog</a>
-        <a href="#" class="menu-item">My Shortlist (<span id="menu-count">0</span>)</a>
+        <a href="#" class="menu-item active">Tuning Dashboard</a>
+        <a href="#" class="menu-item">Marketplace Fleet</a>
+        <a href="#" class="menu-item">Build Shortlist (<span id="menu-count">0</span>)</a>
     </div>
 
+    <!-- Right Workspace Area -->
     <div class="main-content">
-        <div class="selector-bar">
+        <!-- Top Navigation Bar -->
+        <div class="top-nav">
             <select class="custom-select" id="model-filter" onchange="switchVehicleModel(this.value)">
-                <option value="C200">Mercedes C200 / W205</option>
-                <option value="E-Class">Mercedes E-Class / W213</option>
-                <option value="S-Class">Mercedes S-Class / W222</option>
-                <option value="CLA45 (C117)">Mercedes CLA45 AMG / C117</option>
-                <option value="CLA45S (C118)">Mercedes CLA45S AMG / C118</option>
-                <option value="CLS-Class">Mercedes CLS-Class / C257</option>
+                <option value="C200">Mercedes-Benz C200 (W205)</option>
+                <option value="E-Class">Mercedes-Benz E-Class (W213)</option>
+                <option value="S-Class">Mercedes-Benz S-Class (W222)</option>
+                <option value="CLA45 (C117)">Mercedes-Benz CLA45 AMG (C117)</option>
+                <option value="CLA45S (C118)">Mercedes-Benz CLA45S AMG (C118)</option>
+                <option value="CLS-Class">Mercedes-Benz CLS-Class (C257)</option>
             </select>
         </div>
 
+        <!-- Premium Showcase Hero Banner Area -->
         <div class="hero-banner">
             <div class="hero-text">
                 <h1 id="hero-title">Plan your next C200 build</h1>
-                <p>Browse aftermarket configurations, select items to calculate an instant estimated total parts budget, and access direct retailer product pages.</p>
+                <p>Select components from the tuning marketplace grid to construct your configuration profile. Review compatibility details and coordinate your live estimated build budget dynamically.</p>
             </div>
             <div class="hero-image-frame">
                 <img id="vehicle-visual-frame" src="https://unsplash.com" alt="Active Vehicle Profile">
             </div>
         </div>
 
+        <!-- Metric Cards -->
         <div class="stats-grid">
+            <div class="stats-grid"></div>
             <div class="stat-card">
-                <span class="label">Available Parts</span>
+                <span class="label">Available Upgrades</span>
                 <span class="value" id="stat-parts-count">0</span>
             </div>
             <div class="stat-card">
-                <span class="label">Categories</span>
+                <span class="label">Config Categories</span>
                 <span class="value">6</span>
             </div>
             <div class="stat-card">
-                <span class="label">Shortlisted Items</span>
+                <span class="label">Active Additions</span>
                 <span class="value" id="stat-shortlist-count">0</span>
             </div>
             <div class="stat-card">
-                <span class="label">Build Cost (AUD)</span>
+                <span class="label">Estimated Build Cost</span>
                 <span class="value build-total" id="stat-build-total">$0</span>
             </div>
         </div>
 
+        <!-- Tuning Marketplace Grid Layout -->
         <div class="catalog-section">
-            <h2>Parts Catalog Table</h2>
-            <table class="parts-table">
-                <thead>
-                    <tr>
-                        <th class="checkbox-cell">Add</th>
-                        <th>Category</th>
-                        <th>Brand / Retailer</th>
-                        <th>Product Name</th>
-                        <th>Price (AUD)</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="catalog-rows-container">
-                    <!-- Loaded dynamically via JavaScript -->
-                </tbody>
-            </table>
+            <h2>Tuning Marketplace</h2>
+            <div class="marketplace-grid" id="marketplace-grid-container">
+                <!-- Javascript auto-compiles MODS Nation styled cards here -->
+            </div>
         </div>
     </div>
 </div>
 
 <script>
+    // Master Database Array Setup
     const globalPartsDatabase = [
         // C200 / W205
-        { model: "C200", cat: "Body Kit", brand: "Mr Bodykits", name: "Panamericana AMG GT Style Front Grille", price: 189, url: "mrbodykits.com.au" },
-        { model: "C200", cat: "Body Kit", brand: "Mars Performance", name: "C63 AMG Style Front Bumper Bar Kit", price: 899, url: "marsperformance.com.au" },
-        { model: "C200", cat: "Lowering", brand: "BC Racing", name: "BR Series Fully Adjustable Street Coilovers", price: 1499, url: "bcracing.com.au" },
-        { model: "C200", cat: "Wheels", brand: "Rotiform", name: "LAS-R Multi-Spoke Satin Black 19\" Set", price: 2200, url: "rotiform.com" },
-        { model: "C200", cat: "Exhaust", brand: "Xforce", name: "Varex Valve Controlled Exhaust System", price: 2100, url: "xforce.com.au" },
-        
-        // E-Class / W213
-        { model: "E-Class", cat: "Body Kit", brand: "Mr Bodykits", name: "E63 Style Front Bumper Conversion Package", price: 950, url: "mrbodykits.com.au" },
-        { model: "E-Class", cat: "Wheels", brand: "Vertini", name: "Vertini RFS1.1 Brushed Titanium 20\" Wheels", price: 2900, url: "vertiniwheels.com" },
-        { model: "E-Class", cat: "Lowering", brand: "H&R", name: "H&R Sport Performance Lowering Springs", price: 620, url: "hrsprings.com.au" },
-
-        // S-Class / W222
-        { model: "S-Class", cat: "Body Kit", brand: "Mars Performance", name: "S65 AMG Carbon Styling Body Upgrade Pack", price: 2450, url: "marsperformance.com.au" },
-        { model: "S-Class", cat: "Lowering", brand: "Ghost Links", name: "Adjustable Drop Air Suspension Leveling Links", price: 349, url: "modeautoconcepts.com" },
-        { model: "S-Class", cat: "Wheels", brand: "Koya Wheels", name: "Koya SF11 Semi-Forged 20\" Custom Set", price: 2800, url: "koyawheels.co.nz" },
-
-        // CLA45 (C117)
-        { model: "CLA45 (C117)", cat: "Body Kit", brand: "Mr Bodykits", name: "AMG Aero Style Carbon Fibre Front Lip", price: 450, url: "mrbodykits.com.au" },
-        { model: "CLA45 (C117)", cat: "Exhaust", brand: "Xforce", name: "Stainless Steel Catback Performance Exhaust", price: 1650, url: "xforce.com.au" },
-        { model: "CLA45 (C117)", cat: "Lowering", brand: "Eibach", name: "Pro-Kit Sport Series Lowering Springs", price: 550, url: "eibach.com.au" },
-
-        // CLA45S (C118)
